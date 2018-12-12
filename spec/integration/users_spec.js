@@ -59,27 +59,36 @@ describe("routes: users", () => {
 
         });
 
-        it("should not create a user with a duplicate email", (done) => {
-            const user1Options = {
-                url: base,
-                form: {
+        /*describe("testing for duplicates", () => {
+            beforeEach((done) => {
+
+                User.create({
                     username: "testuser",
                     email: "testuser@example.com",
                     password: "password"
-                }
-            };
+                })
+                .then((user) => {
+                    done();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    done();
+                });
+            });
 
-            const user2Options = {
-                url: base,
-                form: {
-                    username: "trialuser",
-                    email: "testuser@example.com",
-                    password: "password"
-                }
-            };
+            it("should not create a user with a duplicate email", (done) => {
 
-            request.post(user1Options, (err, res, body) => {
-                request.post(user2Options, (err, res, body) => {
+
+                const newOptions = {
+                    url: base,
+                    form: {
+                        username: "trialuser",
+                        email: "testuser@example.com",
+                        password: "password"
+                    }
+                };
+
+                request.post(newOptions, (err, res, body) => {
                     User.findAll({where: {email: "testuser@example.com"}})
                     .then((users) => {
                         expect(users.length).toBe(1);
@@ -91,23 +100,16 @@ describe("routes: users", () => {
                     })
                 });
             });
-        });
 
-        it("should not create a user with a duplicate username", (done) => {
-            User.create({
-                username: 'testuser',
-                email: 'testuser@example.com',
-                password: 'password'
-            })
-            .then((user) => {
+            it("should not create a user with a duplicate username", (done) => {
+
                 User.create({
                     username: 'testuser',
-                    email: 'newuser@example.com',
+                    email: 'uniqueemail@example.com',
                     password: 'password'
                 })
-                .then((user2) => {
-                    console.log(user2);
-                    expect(user2).toBeNull();
+                .then((user) => {
+                    expect(user).toBeNull();
                     done();
                 })
                 .catch((err) => {
@@ -115,7 +117,9 @@ describe("routes: users", () => {
                     done();
                 })
             });
-        });
+
+
+        });*/
 
         it("should not create a user with invalid values", (done) => {
 
