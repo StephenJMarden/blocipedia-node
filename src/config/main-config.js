@@ -22,8 +22,7 @@ module.exports = {
             cookie: { maxAge: 1.21e+9 }
         }));
         app.use(flash());
-        // Stripping out passport until user models are created
-        //passportConfig.init(app);
+        passportConfig.init(app);
 
         app.use((req, res, next) => {
             res.locals.currentUser = req.user;

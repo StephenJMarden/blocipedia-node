@@ -1,4 +1,4 @@
-/*const   passport = require('passport'),
+const   passport = require('passport'),
         LocalStrategy = require('passport-local'),
         User = require('../db/models').User,
         authHelper = require('../auth/helpers');
@@ -38,4 +38,3 @@ module.exports = {
         });
     }
 }
-*/

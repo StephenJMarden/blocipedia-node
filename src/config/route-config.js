@@ -1,4 +1,5 @@
-const   staticRoutes = require('../routes/static');
+const   staticRoutes = require('../routes/static'),
+        userRoutes = require('../routes/users');
 
 module.exports = {
     init(app) {
@@ -9,5 +10,6 @@ module.exports = {
         }*/
 
         app.use(staticRoutes);
+        app.use(userRoutes);
     }
 }
