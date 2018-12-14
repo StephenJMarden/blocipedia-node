@@ -59,7 +59,7 @@ describe("routes: users", () => {
 
         });
 
-        /*describe("testing for duplicates", () => {
+        describe("testing for duplicates", () => {
             beforeEach((done) => {
 
                 User.create({
@@ -91,6 +91,7 @@ describe("routes: users", () => {
                 request.post(newOptions, (err, res, body) => {
                     User.findAll({where: {email: "testuser@example.com"}})
                     .then((users) => {
+                        console.log(users);
                         expect(users.length).toBe(1);
                         done();
                     })
@@ -109,6 +110,7 @@ describe("routes: users", () => {
                     password: 'password'
                 })
                 .then((user) => {
+                    console.log(user);
                     expect(user).toBeNull();
                     done();
                 })
@@ -119,7 +121,7 @@ describe("routes: users", () => {
             });
 
 
-        });*/
+        });
 
         it("should not create a user with invalid values", (done) => {
 
