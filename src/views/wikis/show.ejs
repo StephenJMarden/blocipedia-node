@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include ../static/partials/head.ejs %>
+    </head>
+
+    <body>
+        <% include ../static/partials/messages.ejs %>
+        <% include ../static/partials/navbar.ejs %>
+
+        <!-- Page Content -->
+        <main class="container">
+            <div style="display: flex; align-items: center">
+                <h1><%= wiki.title %></h1>
+            </div>
+
+            <% if(currentUser && currentUser.id === wiki.userId) { %>
+                <a href="/wikis/<%= wiki.id %>/edit" class="btn btn-warning">Edit Wiki</a>
+                <form style="display: inline" action="/wikis/<%= wiki.id %>/destroy" method="post">
+                    <button type="submit" class="btn btn-danger">Delete Wiki</button>
+                </form>
+            <% } %>
+
+            <div class="container" style="margin-top: 3em">
+                <%= wiki.body %>
+            </div>
+
+        </main>
+
+        <% include ../static/partials/baseScripts.ejs %>
+    </body>
+</html>

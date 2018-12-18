@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include ../static/partials/head.ejs %>
+    </head>
+
+    <body>
+        <% include ../static/partials/messages.ejs %>
+        <% include ../static/partials/navbar.ejs %>
+
+        <!-- Page Content -->
+        <main class="container">
+            <h1 class="header">Wikis</h1>
+
+            <% if(currentUser) { %>
+                <a href="/wikis/new" class="btn btn-success">Create New Wiki</a>
+            <% } %>
+
+            <ul class="list-group" style="margin-top: 3em">
+                <% wikis.forEach((wiki) => { %>
+
+                    <li class="list-group-item">
+                        <a href="/wikis/<%= wiki.id %>"><%= wiki.title %></a>
+                    </li>
+
+                <% }) %>
+
+            </ul>
+        </main>
+
+        <% include ../static/partials/baseScripts.ejs %>
+    </body>
+</html>

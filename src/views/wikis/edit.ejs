@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ../static/partials/navbar.ejs %>
+
+    <main class="container">
+
+      <h1>New Wiki</h1>
+
+      <form action="/wikis/<%= wiki.id %>/update" method="post">
+        <div class="form-group">
+          <label for="title">Wiki Title</label>
+          <input type="text" class="form-control" name="title" aria-describedby="titleHelp" value="<%= wiki.title %>">
+        </div>
+        <div class="form-group">
+          <label for="body">Body</label>
+          <textarea rows="4" class="form-control" name="body" placeholder="Enter wiki body text"><%= wiki.body %></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-check-label" for="private">Make Wiki Private?</label>
+            <select class="form-control" name="private" id="private">
+                <option <% if(!wiki.private) {%> selected <%}%> value="false">
+                    No
+                </option>
+                <option <% if(wiki.private) {%>selected<%}%> value="true">
+                    Yes
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+    </main>
+
+    <% include ../static/partials/baseScripts.ejs %>
+
+  </body>
+</html>

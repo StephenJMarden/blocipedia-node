@@ -3,7 +3,7 @@ module.exports = {
         let role, id, email, username;
 
         function middleware(req, res, next) {
-            //role = req.body.role || role;
+            role = req.body.role || role;
             username = req.body.username || username;
             id = req.body.userId || id;
             email = req.body.email || email;
@@ -12,8 +12,8 @@ module.exports = {
                 req.user = {
                     "id": id,
                     "username": username,
-                    "email": email
-                    //"role": role
+                    "email": email,
+                    "role": role
                 };
             } else if(id === 0) {
                 delete req.user;
