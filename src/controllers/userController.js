@@ -13,7 +13,7 @@ module.exports = {
             username: req.body.username,
             email: req.body.email,
             password: req.body.password,
-            passwordConfirmation: req.body.passwordConfirmation
+            passwordConfirmation: req.body.password_conf
         };
 
         userQueries.createUser(newUser, (err, user) => {
@@ -26,9 +26,9 @@ module.exports = {
             }
             if(err) {
                 if(err.original.detail.includes("username") && err.original.detail.includes("already exists")) {
-                    req.flash("error", "Username taken");
+                    req.flash("error", {param: "Username", msg: "is already taken"});
                 } else if(err.original.detail.includes("email") && err.original.detail.includes("already exists")) {
-                    req.flash("error", "Email taken");
+                    req.flash("error", {param: "Email", msg: "is already taken"});
                 }
                 res.redirect('/users/signup');
             } else {
@@ -50,10 +50,9 @@ module.exports = {
         res.render('users/signin');
     },
     signIn(req, res, next) {
-        passport.authenticate("local")(req, res, () => {
+        passport.authenticate("local", {failureRedirect: '/users/signin', failureFlash: "Invalid email or password"})(req, res, () => {
             if(!req.user) {
-                req.flash("notice", "Sign in failed. Please try again.");
-                res.redirect('/users/signin');
+                //nothing here
             } else {
                 req.flash("notice", "You've successfully signed in!");
                 res.redirect('/');

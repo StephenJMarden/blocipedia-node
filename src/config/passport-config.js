@@ -16,7 +16,7 @@ module.exports = {
             })
             .then((user) => {
                 if(!user || !authHelper.comparePass(password, user.password)) {
-                    return done(null, false, {message: "Invalid email or password"});
+                    return done(null, false, {param: "", msg: "Invalid email or password"});
                 }
 
                 return done(null, user);

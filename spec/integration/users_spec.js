@@ -38,7 +38,8 @@ describe("routes: users", () => {
                 form: {
                     username: 'newuser',
                     email: 'newuser@example.com',
-                    password: '1234567890'
+                    password: '1234567890',
+                    password_conf: '1234567890'
                 }
             };
 
@@ -56,70 +57,6 @@ describe("routes: users", () => {
                     done();
                 });
             });
-
-        });
-
-        describe("testing for duplicates", () => {
-            beforeEach((done) => {
-
-                User.create({
-                    username: "testuser",
-                    email: "testuser@example.com",
-                    password: "password"
-                })
-                .then((user) => {
-                    done();
-                })
-                .catch((err) => {
-                    console.log(err);
-                    done();
-                });
-            });
-
-            it("should not create a user with a duplicate email", (done) => {
-
-
-                const newOptions = {
-                    url: base,
-                    form: {
-                        username: "trialuser",
-                        email: "testuser@example.com",
-                        password: "password"
-                    }
-                };
-
-                request.post(newOptions, (err, res, body) => {
-                    User.findAll({where: {email: "testuser@example.com"}})
-                    .then((users) => {
-                        console.log(users);
-                        expect(users.length).toBe(1);
-                        done();
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        done();
-                    })
-                });
-            });
-
-            it("should not create a user with a duplicate username", (done) => {
-
-                User.create({
-                    username: 'testuser',
-                    email: 'uniqueemail@example.com',
-                    password: 'password'
-                })
-                .then((user) => {
-                    console.log(user);
-                    expect(user).toBeNull();
-                    done();
-                })
-                .catch((err) => {
-                    console.log(err);
-                    done();
-                })
-            });
-
 
         });
 
@@ -144,6 +81,93 @@ describe("routes: users", () => {
             });
 
         });
+
+        describe("user signing in", () => {
+
+            beforeEach((done) => {
+                this.user;
+
+                User.create({
+                    username: "mozilla224",
+                    email: "mozillafan@gmail.com",
+                    password: "password",
+                    password_conf: "password"
+                })
+                .then((user) => {
+                    this.user = user;
+                    done();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    done();
+                });
+            });
+
+            it("should not allow two users with the same email address", (done) => {
+                const options = {
+                    url: `${base}/signup`,
+                    form: {
+                        email: "mozillafan@gmail.com",
+                        username: "randomuser",
+                        password: "password",
+                        password_conf: "password"
+                    }
+                };
+
+                request.get(options, (err, res, body) => {
+                    User.findAll({where: {email: "mozillafan@gmail.com"}})
+                    .then((users) => {
+                        console.log(users);
+                        expect(users.length).toBe(1);
+                        done();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        done();
+                    })
+                })
+            })
+
+            it("should render a view with a sign in form", (done) => {
+                request.get(`${base}/signin`, (err, res, body) => {
+                    expect(err).toBeNull();
+                    expect(body).toContain("Sign In to Blocipedia");
+                    done();
+                })
+            })
+
+            it("should not allow an invalid email", (done) => {
+                const options = {
+                    url: `${base}/signin`,
+                    form: {
+                        email: 'wrongemail@gmail.com',
+                        password: "password"
+                    }
+                };
+
+                request.post(options, (err, res, body) => {
+                    expect(body).toContain("Redirecting to /users/signin");
+                    done();
+                })
+            });
+
+            it("should not allow an invalid password", (done) => {
+                const options = {
+                    url: `${base}/signin`,
+                    form: {
+                        email: "mozillafan@gmail.com",
+                        password: "wrongpassword"
+                    }
+                };
+
+                request.post(options, (err, res, body) => {
+                    expect(body).toContain("Redirecting to /users/signin");
+                    done();
+                });
+            });
+
+        });
+
 
     });
 

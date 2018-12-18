@@ -6,10 +6,14 @@
     </button>
 
     <% if(messages.error) { %>
-      Validation errors:
+      Errors:
       <ul>
         <% messages.error.forEach((err) => { %>
-          <li><%= `${err}` %></li>
+          <% if(err.param){ %>
+              <li><%= `${err.param} ${err.msg}` %></li>
+          <% } else { %>
+              <li><%= `${err}` %></li>
+          <% } %>
         <% }) %>
       </ul>
     <% } else { %>
