@@ -2,7 +2,8 @@ const   userQueries = require('../db/queries.users.js'),
         passport = require('passport'),
         sgMail = require('@sendgrid/mail');
 
-        sgMail.setApiKey('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');
+        //sgMail.setApiKey('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');
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 module.exports = {
     signUp(req, res, next) {
@@ -45,6 +46,39 @@ module.exports = {
                 });
             }
         });
+    },
+    newAdminForm(req, res, next) {
+        res.render('users/newadmin');
+    },
+    createAdmin(req, res, next) {
+        let newAdmin = {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            passwordConfirmation: req.body.password_conf,
+            role: "admin"
+        };
+
+        if(req.body.superpassword === process.env.ADMIN_CREATION_PASSWORD) {
+            userQueries.createUser(newAdmin, (err, user) => {
+                if(err) {
+                    if(err.original.detail.includes("username") && err.original.detail.includes("already exists")) {
+                        req.flash("error", {param: "Username", msg: "is already taken"});
+                    } else if(err.original.detail.includes("email") && err.original.detail.includes("already exists")) {
+                        req.flash("error", {param: "Email", msg: "is already taken"});
+                    }
+                    res.redirect('/users/signup');
+                } else {
+                    passport.authenticate("local")(req, res, () => {
+                        req.flash("notice", "You have successfully created an admin user!");
+                        res.redirect('/');
+                    });
+                }
+            });
+        } else {
+            req.flash("notice", "You are not authorized to create a new admin user.");
+            res.redirect('/');
+        }
     },
     signInForm(req, res, next) {
         res.render('users/signin');
