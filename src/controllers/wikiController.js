@@ -19,7 +19,7 @@ module.exports = {
             res.render('wikis/new');
         } else {
             req.flash("notice", "You are not authorized to do that.");
-            res.redirect('/wikis');
+            res.redirect('/users/signin');
         }
     },
     create(req, res, next) {
