@@ -1,6 +1,7 @@
 const   userQueries = require('../db/queries.users.js'),
         passport = require('passport'),
-        sgMail = require('@sendgrid/mail');
+        sgMail = require('@sendgrid/mail'),
+        stripe = require('stripe')("sk_test_Jd7mrGpT9eAYwy1H7KNeE5lo");
 
         //sgMail.setApiKey('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');
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -97,5 +98,41 @@ module.exports = {
         req.logout();
         req.flash("notice", "You've successfully signed out!");
         res.redirect('/');
+    },
+    upgradeForm(req, res, next) {
+        res.render('users/upgrade');
+    },
+    upgradeAccount(req, res, next) {
+        const token = req.body.stripeToken;
+
+        const charge = stripe.charges.create({
+            amount: 1500,
+            currency: 'usd',
+            description: 'Account Upgrade',
+            source: token
+        })
+        .then(() => {
+            userQueries.changeRole(req.user.id, "premium", (err, user) => {
+                if(err) {
+                    req.flash("error", {param: "Error: ", msg: "An error has occurred in the upgrade process."});
+                } else {
+                    req.flash("notice", "You've successfully upgraded your account!");
+                    res.redirect('/');
+                }
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    },
+    downgradeAccount(req, res, next) {
+        userQueries.changeRole(req.user.id, "member", (err, user) => {
+            if(err) {
+                req.flash("error", {param: "Error: ", msg: "An error has occurred in the downgrade process."});
+            } else {
+                req.flash("notice", "You have successfully downgraded your account!");
+                res.redirect('/');
+            }
+        });
     }
 }

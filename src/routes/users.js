@@ -10,5 +10,8 @@ router.post('/users/signin', validation.validateSignIn, userController.signIn);
 router.get('/users/signout', userController.signOut);
 router.get('/users/admin/new', userController.newAdminForm);
 router.post('/users/admin/create', userController.createAdmin);
+router.get('/users/upgrade', userController.upgradeForm);
+router.post('/users/upgrade', userController.upgradeAccount);
+router.post('/users/downgrade', userController.downgradeAccount);
 
 module.exports = router;

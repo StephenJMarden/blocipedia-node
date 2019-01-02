@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include ../static/partials/head.ejs %>
+    </head>
+
+    <body>
+        <% include ../static/partials/messages.ejs %>
+        <% include ../static/partials/navbar.ejs %>
+
+        <main class="container">
+            <% if(currentUser) { %>
+                <h4 class="header" style="text-align: center;">You are currently a <span style="text-transform: capitalize;"><%= currentUser.role %></span> User</h4>
+            <% } else { %>
+                <h4 class="header" style="text-align: center;">You are not currently logged in. Please log in to your account to upgrade to premium.</h4>
+            <% } %>
+
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-8">
+                    <% if(currentUser) { %>
+                        <div style="background: rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 1em; margin-top: 3em;">
+                            <% if(currentUser.role === "member") { %>
+                                <h2 class="header" style="text-align: center;">Upgrade to Premium Membership?</h2>
+
+                                <ul class="list-unstyled" style="text-align: center; margin-top: 2em;">
+                                    <li>Grants ability to create and manage private wikis</li>
+                                    <li>Helps fund our site</li>
+                                    <li>$15 / year</li>
+                                </ul>
+
+                                <form method="POST" action="/users/upgrade">
+                                    <div class="form-group" style="text-align: center; margin-top: 3em;">
+                                        <script
+                                            src="https://checkout.stripe.com/checkout.js" class="stripe-button btn"
+                                            data-key="pk_test_fIotcj14obtspZ2WsoQpDko3"
+                                            data-amount="1500"
+                                            data-name="Stripe.com"
+                                            data-description="Premium Account Upgrade"
+                                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                            data-locale="auto"
+                                            data-zip-code="true">
+                                        </script>
+                                    </div>
+                                </form>
+                            <% } else if(currentUser.role === "premium") { %>
+                                <form method="POST" action="/users/downgrade" style="text-align: center; margin-top: 3em;">
+                                    <input type="submit" value="Downgrade Account" class="btn btn-primary" />
+                                </form>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="col"></div>
+            </div>
+        </main>
+
+        <% include ../static/partials/baseScripts.ejs %>
+    </body>
+</html>

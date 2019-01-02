@@ -30,5 +30,25 @@ module.exports = {
                 result["user"] = user;
             }
         });
+    },
+    changeRole(id, role, callback) {
+        return User.findById(id)
+        .then((user) => {
+            if(!user) {
+                return callback("User not found!");
+            }
+
+            const newRole = {role: role};
+
+            user.update(newRole, {
+                fields: Object.keys(newRole)
+            })
+            .then(() => {
+                callback(null, user);
+            })
+            .catch((err) => {
+                callback(err);
+            })
+        })
     }
 }
