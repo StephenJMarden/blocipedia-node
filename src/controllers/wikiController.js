@@ -25,6 +25,11 @@ module.exports = {
     create(req, res, next) {
         const authorized = new Authorizer(req.user).create();
 
+        if(req.body.private === true && req.user.role !== "premium") {
+            req.flash("notice", "You are not authorized to create private wikis");
+            res.redirect('back');
+        }
+
         if(authorized) {
 
             let newWiki = {
@@ -74,6 +79,11 @@ module.exports = {
         });
     },
     update(req, res, next) {
+        if(req.body.private === true && req.user.role !== "premium") {
+            req.flash("notice", "You are not authorized to create private wikis");
+            res.redirect('back');
+        }
+
         wikiQueries.updateWiki(req, req.body, (err, wiki) => {
             if(err || wiki == null) {
                 res.redirect(404, `/wikis/${req.params.id}/edit`);

@@ -134,5 +134,14 @@ module.exports = {
                 res.redirect('/');
             }
         });
+    },
+    show(req, res, next) {
+        userQueries.getUser(req.params.id, (err, user) => {
+            if(err || user == null) {
+                res.redirect(404, '/');
+            } else {
+                res.render('users/show', {user});
+            }
+        })
     }
 }

@@ -1,5 +1,6 @@
 const   User = require('./models').User,
-        bcrypt = require('bcryptjs');
+        bcrypt = require('bcryptjs'),
+        Wiki = require('./models').Wiki;
 
 module.exports = {
 
@@ -22,14 +23,22 @@ module.exports = {
     },
     getUser(id, callback) {
         let result = {};
-        User.findById(id)
+        User.findById(id, {
+            include: [
+                {model: Wiki, as: "wikis"}
+            ]
+        })
         .then((user) => {
             if(!user) {
                 callback(404);
             } else {
                 result["user"] = user;
+                callback(null, user);
             }
-        });
+        })
+        .catch((err) => {
+            callback(err);
+        })
     },
     changeRole(id, role, callback) {
         return User.findById(id)
@@ -44,7 +53,17 @@ module.exports = {
                 fields: Object.keys(newRole)
             })
             .then(() => {
-                callback(null, user);
+                if(newRole.role === "member") {
+                    Wiki.update(
+                        {private: false},
+                        {where: {userId: user.id}}
+                    )
+                    .then(() => {
+                        callback(null, user);
+                    });
+                } else {
+                    callback(null, user);
+                }
             })
             .catch((err) => {
                 callback(err);

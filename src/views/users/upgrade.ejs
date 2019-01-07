@@ -44,6 +44,13 @@
                                     </div>
                                 </form>
                             <% } else if(currentUser.role === "premium") { %>
+                                <h2 class="header" style="text-align: center;">Downgrade Membership?</h2>
+
+                                <ul class="list-unstyled" style="text-align: center; margin-top: 2em;">
+                                    <li>Private wikis will become public</li>
+                                    <li>Membership fee will not be refunded</li>
+                                    <li>Resuming premium membership will change a new fee</li>
+                                </ul>
                                 <form method="POST" action="/users/downgrade" style="text-align: center; margin-top: 3em;">
                                     <input type="submit" value="Downgrade Account" class="btn btn-primary" />
                                 </form>

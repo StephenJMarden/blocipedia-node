@@ -25,9 +25,11 @@
                 <option <% if(!wiki.private) {%> selected <%}%> value="false">
                     No
                 </option>
-                <option <% if(wiki.private) {%>selected<%}%> value="true">
-                    Yes
-                </option>
+                <% if(currentUser && currentUser.role === "premium") { %>
+                    <option <% if(wiki.private) {%>selected<%}%> value="true">
+                        Yes
+                    </option>
+                <% } %>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>

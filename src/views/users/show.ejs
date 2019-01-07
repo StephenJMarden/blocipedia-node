@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include ../static/partials/head.ejs %>
+    </head>
+
+    <body>
+        <% include ../static/partials/messages.ejs %>
+        <% include ../static/partials/navbar.ejs %>
+
+        <main class="container">
+            <h1 class="header" style="text-align: center;">My Profile</h1>
+
+            <% if(currentUser && currentUser.id === user.id) { %>
+
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-8">
+                        <div style="background: rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 1em; margin-top: 3em;">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div>Username</div>
+                                    <div>Email:</div>
+                                    <div>Password:</div>
+                                    <div>Premium Membership:</div>
+                                </div>
+                                <div class="col-8">
+                                    <div><%= currentUser.username %></div>
+                                    <div><%= currentUser.email %></div>
+                                    <!-- Dummy Password Change Button -->
+                                    <div>****** (<a href="/users/change_password">Change</a>)</div>
+                                    <div>
+                                        <% if(currentUser.role === "premium") { %>
+                                            Active
+                                        <% } else { %>
+                                            Inactive
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2em;">
+                            <h2 style="text-align: center;">My Wikis</h2>
+                            <ul class="list-group" style="margin-top: 2em;">
+                                <% user.wikis.forEach((wiki) => { %>
+                                    <li class="list-group-item">
+                                        <a href="/wikis/<%= wiki.id %>"><%= wiki.title %> <% if(wiki.private){ %><span class="badge badge-light">Private</span><% } %></a>
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
+
+            <% } %>
+        </main>
+
+        <% include ../static/partials/baseScripts.ejs %>
+    </body>
+</html>

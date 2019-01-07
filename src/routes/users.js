@@ -13,5 +13,6 @@ router.post('/users/admin/create', userController.createAdmin);
 router.get('/users/upgrade', userController.upgradeForm);
 router.post('/users/upgrade', userController.upgradeAccount);
 router.post('/users/downgrade', userController.downgradeAccount);
+router.get('/users/:id', userController.show);
 
 module.exports = router;

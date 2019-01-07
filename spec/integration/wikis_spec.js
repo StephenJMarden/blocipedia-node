@@ -249,6 +249,46 @@ describe("routes: wikis", () => {
 
     });
 
-    TODO: Admin testing suite
+    describe("premium member testing suite", () => {
+
+        beforeEach((done) => {
+            request.get({
+                url: "http://localhost:3000/auth/fake",
+                form: {
+                    userId: this.user.id,
+                    username: this.user.username,
+                    email: this.user.email,
+                    role: "premium"
+                }
+            }, (err, res, body) => {
+                done();
+            })
+        });
+
+        it("should allow a premium member to create a private wiki", (done) => {
+            const options = {
+                url: `${base}/create`,
+                form: {
+                    title: "Robin",
+                    body: "TODO: create a wiki on robin",
+                    private: true
+                }
+            };
+
+            request.post(options, (err, res, body) => {
+                Wiki.findOne({
+                    where: {title: "Robin"}
+                })
+                .then((wiki) => {
+                    expect(wiki.title).toBe("Robin");
+                    expect(wiki.body).toBe("TODO: create a wiki on robin");
+                    expect(wiki.private).toBe(true);
+                    done();
+                });
+            });
+        });
+    });
+
+    //TODO: Admin testing suite
 
 });

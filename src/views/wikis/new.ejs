@@ -20,14 +20,16 @@
           <textarea rows="4" class="form-control" name="body" placeholder="Enter wiki body text"></textarea>
         </div>
         <div class="form-group">
-            <label class="form-check-label" for="private">Make Wiki Private?</label>
+            <label class="form-check-label" for="private">Make Wiki Private? <span class="badge badge-light">Premium Feature</span></label>
             <select class="form-control" name="private" id="private">
                 <option selected value="false">
                     No
                 </option>
-                <option value="true">
-                    Yes
-                </option>
+                <% if(currentUser && currentUser.role === "premium") { %>
+                    <option value="true">
+                        Yes
+                    </option>
+                <% } %>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
